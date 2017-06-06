@@ -12,6 +12,14 @@ public class CompositeCommand implements IPlotterCommand {
 
     private List<IPlotterCommand> childCommands = new ArrayList<>();
 
+    public CompositeCommand(List<IPlotterCommand> commands) {
+        this.childCommands = commands;
+    }
+
+    public CompositeCommand(IPlotterCommand command) {
+        this.childCommands = new ArrayList<IPlotterCommand>();
+        childCommands.add(command);
+    }
     public void add(IPlotterCommand iPlotterCommand){
         childCommands.add(iPlotterCommand);
     }
@@ -22,8 +30,11 @@ public class CompositeCommand implements IPlotterCommand {
 
     @Override
     public void execute(IPlotter plotter) {
+
         for(IPlotterCommand iPlotterCommand : childCommands){
-            iPlotterCommand.execute(plotter);
+            if (iPlotterCommand instanceof ICompoundCommand) {
+                ((ICompoundCommand)iPlotterCommand).execute(plotter);
+            } else iPlotterCommand.execute(plotter);
         }
     }
 }
