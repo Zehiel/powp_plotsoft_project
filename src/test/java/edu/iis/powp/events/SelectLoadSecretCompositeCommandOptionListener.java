@@ -41,11 +41,26 @@ public class SelectLoadSecretCompositeCommandOptionListener implements ActionLis
         letterS.add(new DrawToCommand(70, 50));
         letterS.add(new DrawToCommand(20, 50));
 
+        CompositeCommand secondLetterS = new CompositeCommand();
+        letterS.add(new SetPositionCommand(170, -50));
+        letterS.add(new DrawToCommand(120, -50));
+        letterS.add(new DrawToCommand(120, 0));
+        letterS.add(new DrawToCommand(170, 0));
+        letterS.add(new DrawToCommand(170, 50));
+        letterS.add(new DrawToCommand(120, 50));
+
+
         commands.add(firstLetterI);
         commands.add(secondLetterI);
         commands.add(letterS);
 
+        CompositeCommand superCommand = new CompositeCommand(commands);
+
+        List<IPlotterCommand> superCommands = new ArrayList<>();
+        superCommands.add(superCommand);
+        superCommands.add(secondLetterS);
+
         PlotterCommandManager manager = FeaturesManager.getPlotterCommandManager();
-        manager.setCurrentCommand(commands, "TopSecretCommand");
+        manager.setCurrentCommand(superCommands, "TopSecretCommand");
     }
 }
