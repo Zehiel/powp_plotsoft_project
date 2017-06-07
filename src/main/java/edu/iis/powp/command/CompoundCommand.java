@@ -11,20 +11,15 @@ import java.util.List;
  */
 public class CompoundCommand implements ICompoundCommand {
 
-    private List<? extends IPlotterCommand> childCommands = new ArrayList<>();
+    private List<IPlotterCommand> childCommands;
+    private String commandName = "Undefined Command Name";
 
     public CompoundCommand() {
-        this.childCommands = new ArrayList<IPlotterCommand>();
-    }
-
-    public CompoundCommand(List<? extends IPlotterCommand> commands) {
-
-        this.childCommands = commands;
-    }
-
-    public CompoundCommand(IPlotterCommand command) {
         this.childCommands = new ArrayList<>();
-        childCommands.add(command);
+    }
+
+    public CompoundCommand(List<IPlotterCommand> commands) {
+        this.childCommands = commands;
     }
 
     public void add(IPlotterCommand iPlotterCommand){
@@ -36,17 +31,25 @@ public class CompoundCommand implements ICompoundCommand {
     }
 
     @Override
+    public void setCommandName(String name) {
+        commandName = name;
+    }
+
+    @Override
     public void execute(IPlotter plotter) {
 
         for(IPlotterCommand iPlotterCommand : childCommands){
-            if (iPlotterCommand instanceof ICompoundCommand) {
-                ((ICompoundCommand)iPlotterCommand).execute(plotter);
-            } else iPlotterCommand.execute(plotter);
+            iPlotterCommand.execute(plotter);
         }
     }
 
     @Override
-    public Iterator<ICompoundCommand> iterator() {
+    public Iterator<IPlotterCommand> iterator() {
         return childCommands.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return commandName;
     }
 }

@@ -10,10 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.iis.powp.appext.FeaturesManager;
-import edu.iis.powp.command.CompositeCommand;
-import edu.iis.powp.command.DrawToCommand;
-import edu.iis.powp.command.IPlotterCommand;
-import edu.iis.powp.command.SetPositionCommand;
+import edu.iis.powp.command.*;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 
 public class SelectLoadSecretCompositeCommandOptionListener implements ActionListener {
@@ -54,13 +51,13 @@ public class SelectLoadSecretCompositeCommandOptionListener implements ActionLis
         commands.add(secondLetterI);
         commands.add(letterS);
 
-        CompositeCommand superCommand = new CompositeCommand(commands);
+        CompoundCommand superCommand = new CompoundCommand(commands);
 
-        List<IPlotterCommand> superCommands = new ArrayList<>();
-        superCommands.add(superCommand);
-        superCommands.add(secondLetterS);
+//        List<IPlotterCommand> superCommands = new ArrayList<>();
+//        superCommands.add(superCommand);
+//        superCommands.add(secondLetterS);
 
         PlotterCommandManager manager = FeaturesManager.getPlotterCommandManager();
-        manager.setCurrentCommand(superCommands, "TopSecretCommand");
+        manager.setCurrentCommand(superCommand, "TopSecretCommand");
     }
 }

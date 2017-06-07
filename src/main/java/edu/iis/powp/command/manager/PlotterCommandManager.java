@@ -49,6 +49,9 @@ public class PlotterCommandManager
 			public Iterator<IPlotterCommand> iterator() {
 				return plotterCommands.iterator();
 			}
+
+			@Override
+			public void setCommandName(String name) {};
 			
 			@Override
 			public String toString() {
@@ -57,6 +60,12 @@ public class PlotterCommandManager
 		});
 
     }
+
+	public synchronized void setCurrentCommand(ICompoundCommand iCompoundCommand, String name)
+	{
+		iCompoundCommand.setCommandName(name);
+		setCurrentCommand(iCompoundCommand);
+	}
     
     /**
      * Return current command.

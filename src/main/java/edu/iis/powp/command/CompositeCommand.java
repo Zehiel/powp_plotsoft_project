@@ -36,9 +36,7 @@ public class CompositeCommand implements IPlotterCommand {
     public void execute(IPlotter plotter) {
 
         for(IPlotterCommand iPlotterCommand : childCommands){
-            if (iPlotterCommand instanceof ICompoundCommand) {
-                ((ICompoundCommand)iPlotterCommand).execute(plotter);
-            } else iPlotterCommand.execute(plotter);
+            iPlotterCommand.execute(plotter);
         }
     }
 }
