@@ -10,10 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.iis.powp.appext.FeaturesManager;
-import edu.iis.powp.command.CompositeCommand;
-import edu.iis.powp.command.DrawToCommand;
-import edu.iis.powp.command.IPlotterCommand;
-import edu.iis.powp.command.SetPositionCommand;
+import edu.iis.powp.command.*;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 
 public class SelectLoadSecretCompositeCommandOptionListener implements ActionListener {
@@ -41,11 +38,26 @@ public class SelectLoadSecretCompositeCommandOptionListener implements ActionLis
         letterS.add(new DrawToCommand(70, 50));
         letterS.add(new DrawToCommand(20, 50));
 
+        CompositeCommand secondLetterS = new CompositeCommand();
+        letterS.add(new SetPositionCommand(170, -50));
+        letterS.add(new DrawToCommand(120, -50));
+        letterS.add(new DrawToCommand(120, 0));
+        letterS.add(new DrawToCommand(170, 0));
+        letterS.add(new DrawToCommand(170, 50));
+        letterS.add(new DrawToCommand(120, 50));
+
+
         commands.add(firstLetterI);
         commands.add(secondLetterI);
         commands.add(letterS);
 
+        CompoundCommand superCommand = new CompoundCommand(commands);
+
+//        List<IPlotterCommand> superCommands = new ArrayList<>();
+//        superCommands.add(superCommand);
+//        superCommands.add(secondLetterS);
+
         PlotterCommandManager manager = FeaturesManager.getPlotterCommandManager();
-        manager.setCurrentCommand(commands, "TopSecretCommand");
+        manager.setCurrentCommand(superCommand, "TopSecretCommand");
     }
 }
