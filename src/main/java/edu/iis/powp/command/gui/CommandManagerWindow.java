@@ -15,11 +15,14 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private PlotterCommandManager commandManager;
 
 	private final JLabel commandNameLabel = new JLabel("Command Name");
+	private final JLabel commandListLabel = new JLabel("Command List");
 	private JTextArea currentCommandField;
-	private JTextPane commandNameField;
-	private JButton setPositionButton, drawToButton;
+	private JTextField commandNameField;
+	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton;
+	private JList commandList;
 	private JTextArea observerListField;
 
+	private DefaultListModel listModel;
 	private String observerListString;
 
 	/**
@@ -61,13 +64,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 //		content.add(currentCommandField, c);
 //		updateCurrentCommandField();
 //
-//		JButton btnClearCommand = new JButton("Clear command");
-//		btnClearCommand.addActionListener((ActionEvent e) -> this.clearCommand());
-//		c.fill = GridBagConstraints.BOTH;
-//		c.weightx = 1;
-//		c.gridx = 0;
-//		c.weighty = 1;
-//		content.add(btnClearCommand, c);
+
 //
 //		JButton btnClearObservers = new JButton("Delete observers");
 //		btnClearObservers.addActionListener((ActionEvent e) -> this.deleteObservers());
@@ -85,12 +82,76 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		c.weighty = 1;
 		content.add(drawPanel,c);
 
-		JPanel sidePanel = new JPanel();
+		JPanel sidePanel = new JPanel(new GridBagLayout());
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.gridx = 1;
 		c.weighty = 1;
 		content.add(sidePanel, c);
+
+		initializeSidePanel(sidePanel);
+	}
+
+	private void initializeSidePanel(JPanel sidePanel) {
+		GridBagConstraints c = new GridBagConstraints();
+
+		setPositionButton = new JButton("Set Position - Mode");
+		c.insets = new Insets(3,3,3,3);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 0;
+		c.weighty = 1;
+		sidePanel.add(setPositionButton, c);
+
+		drawToButton = new JButton("Draw To - Mode");
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 1;
+		c.weighty = 1;
+		sidePanel.add(drawToButton, c);
+
+		clearCommandButton = new JButton("Clear command");
+		clearCommandButton.addActionListener((ActionEvent e) -> this.clearCommand());
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 3;
+		c.weighty = 1;
+		sidePanel.add(clearCommandButton, c);
+
+		commandNameLabel.setHorizontalAlignment(JLabel.CENTER);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 4;
+		c.weighty = 1;
+		sidePanel.add(commandNameLabel, c);
+
+		commandNameField = new JTextField();
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 5;
+		c.weighty = 1;
+		sidePanel.add(commandNameField, c);
+
+		saveCommandButton = new JButton("Save Command");
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 6;
+		c.weighty = 1;
+		sidePanel.add(saveCommandButton, c);
+
+		commandListLabel.setHorizontalAlignment(JLabel.CENTER);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 7;
+		c.weighty = 1;
+		sidePanel.add(commandListLabel, c);
+
+		listModel = new DefaultListModel();
+		commandList = new JList(listModel);
+		listModel.addElement(new String("PLACEHOLDER"));
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 8;
+		c.weighty = 1;
+		sidePanel.add(saveCommandButton, c);
+
+		useCommandButton = new JButton("Use Command");
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 9;
+		c.weighty = 1;
+		sidePanel.add(useCommandButton, c);
 	}
 
 	private void clearCommand() {
