@@ -19,6 +19,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private JTextArea currentCommandField;
 	private JTextField commandNameField;
 	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton;
+	private JList commandList;
 	private JTextArea observerListField;
 
 	private DefaultListModel listModel;
@@ -116,18 +117,15 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 		JPanel commandListPanel = new JPanel(new GridLayout(1,1));
 		listModel = new DefaultListModel();
-		listModel.addElement(new String("PLACEHOLDER"));
-		listModel.addElement(new String("PLACEHOLDER2"));
-		JList commandList = new JList(listModel);
+		commandList = new JList(listModel);
 		commandListPanel.add(commandList);
+		listModel.addElement(new String("PLACEHOLDER"));
+		sidePanel.add(saveCommandButton);
 
-
-		//JScrollPane scrollPane = new JScrollPane(commandListPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBar(new JScrollBar(Adjustable.VERTICAL));
- 		scrollPane.setViewportView(scrollPane);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setViewportView(commandListPanel);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		sidePanel.add(scrollPane);
 
 		useCommandButton = new JButton("Use Command");
