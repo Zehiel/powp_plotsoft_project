@@ -70,6 +70,8 @@ public class FeaturesManager {
 		return driverManager;
 	}
 
+
+
 	/**
 	 * Get manager of application plotter command.
 	 * 
