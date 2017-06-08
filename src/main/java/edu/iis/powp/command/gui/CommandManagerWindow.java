@@ -19,7 +19,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private JTextArea currentCommandField;
 	private JTextField commandNameField;
 	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton;
-	private JList commandList;
 	private JTextArea observerListField;
 
 	private DefaultListModel listModel;
@@ -82,7 +81,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		c.weighty = 1;
 		content.add(drawPanel,c);
 
-		JPanel sidePanel = new JPanel(new GridBagLayout());
+		JPanel sidePanel = new JPanel(new GridLayout(8,1,2,2));
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.gridx = 1;
@@ -93,65 +92,46 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	}
 
 	private void initializeSidePanel(JPanel sidePanel) {
-		GridBagConstraints c = new GridBagConstraints();
-
 		setPositionButton = new JButton("Set Position - Mode");
-		c.insets = new Insets(3,3,3,3);
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 0;
-		c.weighty = 1;
-		sidePanel.add(setPositionButton, c);
+		sidePanel.add(setPositionButton);
 
 		drawToButton = new JButton("Draw To - Mode");
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 1;
-		c.weighty = 1;
-		sidePanel.add(drawToButton, c);
+		sidePanel.add(drawToButton);
 
 		clearCommandButton = new JButton("Clear command");
 		clearCommandButton.addActionListener((ActionEvent e) -> this.clearCommand());
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 3;
-		c.weighty = 1;
-		sidePanel.add(clearCommandButton, c);
+		sidePanel.add(clearCommandButton);
 
 		commandNameLabel.setHorizontalAlignment(JLabel.CENTER);
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 4;
-		c.weighty = 1;
-		sidePanel.add(commandNameLabel, c);
+		sidePanel.add(commandNameLabel);
 
 		commandNameField = new JTextField();
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 5;
-		c.weighty = 1;
-		sidePanel.add(commandNameField, c);
+		sidePanel.add(commandNameField);
 
 		saveCommandButton = new JButton("Save Command");
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 6;
-		c.weighty = 1;
-		sidePanel.add(saveCommandButton, c);
+		sidePanel.add(saveCommandButton);
 
 		commandListLabel.setHorizontalAlignment(JLabel.CENTER);
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 7;
-		c.weighty = 1;
-		sidePanel.add(commandListLabel, c);
+		sidePanel.add(commandListLabel);
 
+		JPanel commandListPanel = new JPanel(new GridLayout(1,1));
 		listModel = new DefaultListModel();
-		commandList = new JList(listModel);
 		listModel.addElement(new String("PLACEHOLDER"));
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 8;
-		c.weighty = 1;
-		sidePanel.add(saveCommandButton, c);
+		listModel.addElement(new String("PLACEHOLDER2"));
+		JList commandList = new JList(listModel);
+		commandListPanel.add(commandList);
+
+
+		//JScrollPane scrollPane = new JScrollPane(commandListPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBar(new JScrollBar(Adjustable.VERTICAL));
+ 		scrollPane.setViewportView(scrollPane);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		sidePanel.add(scrollPane);
 
 		useCommandButton = new JButton("Use Command");
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 9;
-		c.weighty = 1;
-		sidePanel.add(useCommandButton, c);
+		sidePanel.add(useCommandButton);
 	}
 
 	private void clearCommand() {
