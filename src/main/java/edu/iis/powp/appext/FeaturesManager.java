@@ -5,7 +5,14 @@ import edu.iis.powp.app.DriverManager;
 import edu.iis.powp.command.manager.LoggerCommandChangeObserver;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.events.predefine.SelectClearPanelOptionListener;
+import edu.iis.powp.events.predefine.SelectSaveCustomCommandOptionListener;
 import edu.kis.powp.drawer.panel.DrawPanelController;
+import edu.kis.powp.drawer.shape.ILine;
+import edu.kis.powp.drawer.shape.LineFactory;
+
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FeaturesManager {
 
@@ -14,6 +21,7 @@ public class FeaturesManager {
 	private static PlotterCommandManager commandManager;
 	private static DriverManager driverManager;
 	private static DrawPanelController drawerController;
+	private static int startX, startY, endX, endY;
 
 	/**
 	 * Startup configuration.
@@ -45,11 +53,43 @@ public class FeaturesManager {
 	private static void setupDrawerPlugin(Application application) {
 		SelectClearPanelOptionListener selectClearPanelOptionListener = new SelectClearPanelOptionListener();
 
+		SelectSaveCustomCommandOptionListener selectSaveCustomCommandOptionListener = new SelectSaveCustomCommandOptionListener();
+
 		drawerController = new DrawPanelController();
 		application.addComponentMenu(DrawPanelController.class, "Draw Panel", 0);
 		application.addComponentMenuElement(DrawPanelController.class, "Clear Panel", selectClearPanelOptionListener);
+		application.addComponentMenuElement(DrawPanelController.class, "Save custom command", selectSaveCustomCommandOptionListener);
+		JPanel drawerPanel = application.getFreePanel();
+		drawerController.initialize(drawerPanel);
 
-		drawerController.initialize(application.getFreePanel());
+
+		drawerPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				startX = e.getX()-270;
+				startY = e.getY()-230;
+				System.out.println("Start:"+startX+startY);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				endX = e.getX()-270;
+				endY = e.getY()-230;
+                System.out.println("Finish:"+endX+endY);
+                ILine line = LineFactory.getBasicLine();
+                line.setStartCoordinates(startX,startY);
+                line.setEndCoordinates(endX,endY);
+				drawerController.drawLine(line);
+			}
+		});
+
+//		drawerPanel.addMouseMotionListener(new MouseMotionAdapter() {
+//			@Override
+//			public void mouseDragged(MouseEvent e) {
+//				super.mouseDragged(e);
+//			}
+//		});
+
 	}
 
 	/**
