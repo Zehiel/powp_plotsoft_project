@@ -1,14 +1,10 @@
 package edu.iis.powp.command.gui;
 
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.observer.Subscriber;
@@ -18,10 +14,16 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private PlotterCommandManager commandManager;
 
+	private final JLabel commandNameLabel = new JLabel("Command Name");
+	private final JLabel commandListLabel = new JLabel("Command List");
 	private JTextArea currentCommandField;
-
-	private String observerListString;
+	private JTextField commandNameField;
+	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton;
+	private JList commandList;
 	private JTextArea observerListField;
+
+	private DefaultListModel listModel;
+	private String observerListString;
 
 	/**
 	 * 
@@ -29,79 +31,136 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private static final long serialVersionUID = 9204679248304669948L;
 
 	public CommandManagerWindow(PlotterCommandManager commandManager) {
+		this.commandManager = commandManager;
+		initializeUI();
+	}
+
+	private void initializeUI() {
 		this.setTitle("Command Manager");
 		this.setSize(400, 400);
 		Container content = this.getContentPane();
 		content.setLayout(new GridBagLayout());
 
-		this.commandManager = commandManager;
-
 		GridBagConstraints c = new GridBagConstraints();
 
-		observerListField = new JTextArea("");
-		observerListField.setEditable(false);
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		c.gridx = 0;
-		c.weighty = 1;
-		content.add(observerListField, c);
-		updateObserverListField();
 
-		currentCommandField = new JTextArea("");
-		currentCommandField.setEditable(false);
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		c.gridx = 0;
-		c.weighty = 1;
-		content.add(currentCommandField, c);
-		updateCurrentCommandField();
 
-		JButton btnClearCommand = new JButton("Clear command");
-		btnClearCommand.addActionListener((ActionEvent e) -> this.clearCommand());
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		c.gridx = 0;
-		c.weighty = 1;
-		content.add(btnClearCommand, c);
 
-		JButton btnClearObservers = new JButton("Delete observers");
-		btnClearObservers.addActionListener((ActionEvent e) -> this.deleteObservers());
+//		observerListField = new JTextArea("");
+//		observerListField.setEditable(false);
+//		c.fill = GridBagConstraints.BOTH;
+//		c.weightx = 1;
+//		c.gridx = 0;
+//		c.weighty = 1;
+//		content.add(observerListField, c);
+//		updateObserverListField();
+//
+//		currentCommandField = new JTextArea("");
+//		currentCommandField.setEditable(false);
+//		c.fill = GridBagConstraints.BOTH;
+//		c.weightx = 1;
+//		c.gridx = 0;
+//		c.weighty = 1;
+//		content.add(currentCommandField, c);
+//		updateCurrentCommandField();
+//
+
+//
+//		JButton btnClearObservers = new JButton("Delete observers");
+//		btnClearObservers.addActionListener((ActionEvent e) -> this.deleteObservers());
+//		c.fill = GridBagConstraints.BOTH;
+//		c.weightx = 1;
+//		c.gridx = 0;
+//		c.weighty = 1;
+//		content.add(btnClearObservers, c);
+
+		JPanel drawPanel = new JPanel();
+		drawPanel.setBackground(Color.WHITE);
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
+		c.weightx = 3;
 		c.gridx = 0;
 		c.weighty = 1;
-		content.add(btnClearObservers, c);
+		content.add(drawPanel,c);
+
+		JPanel sidePanel = new JPanel(new GridLayout(8,1,2,2));
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.gridx = 1;
+		c.weighty = 1;
+		content.add(sidePanel, c);
+
+		initializeSidePanel(sidePanel);
+	}
+
+	private void initializeSidePanel(JPanel sidePanel) {
+		setPositionButton = new JButton("Set Position - Mode");
+		sidePanel.add(setPositionButton);
+
+		drawToButton = new JButton("Draw To - Mode");
+		sidePanel.add(drawToButton);
+
+		clearCommandButton = new JButton("Clear command");
+		clearCommandButton.addActionListener((ActionEvent e) -> this.clearCommand());
+		sidePanel.add(clearCommandButton);
+
+		commandNameLabel.setHorizontalAlignment(JLabel.CENTER);
+		sidePanel.add(commandNameLabel);
+
+		commandNameField = new JTextField();
+		sidePanel.add(commandNameField);
+
+		saveCommandButton = new JButton("Save Command");
+		sidePanel.add(saveCommandButton);
+
+		commandListLabel.setHorizontalAlignment(JLabel.CENTER);
+		sidePanel.add(commandListLabel);
+
+		JPanel commandListPanel = new JPanel(new GridLayout(1,1));
+		listModel = new DefaultListModel();
+		commandList = new JList(listModel);
+		commandListPanel.add(commandList);
+		listModel.addElement(new String("PLACEHOLDER"));
+		sidePanel.add(saveCommandButton);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(commandListPanel);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		sidePanel.add(scrollPane);
+
+		useCommandButton = new JButton("Use Command");
+		sidePanel.add(useCommandButton);
 	}
 
 	private void clearCommand() {
-		commandManager.clearCurrentCommand();
-		updateCurrentCommandField();
+//		commandManager.clearCurrentCommand();
+//		updateCurrentCommandField();
 	}
 
 	public void updateCurrentCommandField() {
-		currentCommandField.setText(commandManager.getCurrentCommandString());
+//		currentCommandField.setText(commandManager.getCurrentCommandString());
 	}
 
 	public void deleteObservers() {
-		commandManager.getChangePublisher().clearObservers();
-		this.updateObserverListField();
+//		commandManager.getChangePublisher().clearObservers();
+//		this.updateObserverListField();
 	}
 
 	private void updateObserverListField() {
-		observerListString = "";
-		List<Subscriber> commandChangeSubscribers = commandManager.getChangePublisher().getSubscribers();
-		for (Subscriber observer : commandChangeSubscribers) {
-			observerListString += observer.toString() + System.lineSeparator();
-		}
-		if (commandChangeSubscribers.isEmpty())
-			observerListString = "No observers loaded";
-
-		observerListField.setText(observerListString);
+//		observerListString = "";
+//		List<Subscriber> commandChangeSubscribers = commandManager.getChangePublisher().getSubscribers();
+//		for (Subscriber observer : commandChangeSubscribers) {
+//			observerListString += observer.toString() + System.lineSeparator();
+//		}
+//		if (commandChangeSubscribers.isEmpty())
+//			observerListString = "No observers loaded";
+//
+//		observerListField.setText(observerListString);
 	}
 
 	@Override
 	public void HideIfVisibleAndShowIfHidden() {
-		updateObserverListField();
+//		updateObserverListField();
 		if (this.isVisible()) {
 			this.setVisible(false);
 		} else {
