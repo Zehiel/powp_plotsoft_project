@@ -2,17 +2,16 @@ package edu.iis.powp.command.gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 import javax.swing.*;
 
+import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.PlotterCommandManager;
-import edu.iis.powp.observer.Subscriber;
 import edu.iis.powp.window.WindowComponent;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
 
-	private PlotterCommandManager commandManager;
+	private IPlotterCommandManager commandManager;
 
 	private final JLabel commandNameLabel = new JLabel("Command Name");
 	private final JLabel commandListLabel = new JLabel("Command List");
@@ -30,7 +29,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	 */
 	private static final long serialVersionUID = 9204679248304669948L;
 
-	public CommandManagerWindow(PlotterCommandManager commandManager) {
+	public CommandManagerWindow(IPlotterCommandManager commandManager) {
 		this.commandManager = commandManager;
 		initializeUI();
 	}

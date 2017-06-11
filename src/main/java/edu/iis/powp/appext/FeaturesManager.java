@@ -2,6 +2,7 @@ package edu.iis.powp.appext;
 
 import edu.iis.powp.app.Application;
 import edu.iis.powp.app.DriverManager;
+import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.LoggerCommandChangeObserver;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.events.predefine.SelectClearPanelOptionListener;
@@ -11,7 +12,7 @@ public class FeaturesManager {
 
 	private static boolean areFeaturesAdded = false;
 
-	private static PlotterCommandManager commandManager;
+	private static IPlotterCommandManager commandManager;
 	private static DriverManager driverManager;
 	private static DrawPanelController drawerController;
 
@@ -70,12 +71,16 @@ public class FeaturesManager {
 		return driverManager;
 	}
 
+	public static void setPlotterCommandManager(IPlotterCommandManager iPlotterCommandManager) {
+		commandManager = iPlotterCommandManager;
+	}
+
 	/**
 	 * Get manager of application plotter command.
 	 * 
 	 * @return plotterCommandManager.
 	 */
-	public static PlotterCommandManager getPlotterCommandManager() {
+	public static IPlotterCommandManager getPlotterCommandManager() {
 		return commandManager;
 	}
 }
