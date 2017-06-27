@@ -19,7 +19,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private final JLabel commandNameLabel = new JLabel("Command Name");
 	private final JLabel commandListLabel = new JLabel("Command List");
-	private JTextArea currentCommandField;
+	private JTextArea currentCommandField = new JTextArea("");
 	private JTextField commandNameField;
 	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton;
 	private JList commandList;
@@ -145,6 +145,11 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	public void updateCurrentCommandField() {
 		currentCommandField.setText(commandManager.getCurrentCommandString());
+	}
+
+	public void deleteObservers() {
+		commandManager.getChangePublisher().clearObservers();
+		this.updateObserverListField();
 	}
 
 

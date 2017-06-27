@@ -1,6 +1,7 @@
 package edu.iis.powp.events;
 
 import edu.iis.powp.app.Application;
+import edu.iis.powp.appext.FeaturesManager;
 import edu.iis.powp.command.IPlotterCommand;
 
 
@@ -12,5 +13,6 @@ public abstract class AbstractCommandListener {
 
     public AbstractCommandListener(Application context) {
         this.context = context;
+        FeaturesManager.getPlotterCommandManager().getChangePublisher().clearObservers();
     }
 }
