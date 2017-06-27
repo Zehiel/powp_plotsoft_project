@@ -13,6 +13,8 @@ import edu.kis.powp.drawer.shape.LineFactory;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FeaturesManager {
 
@@ -22,6 +24,7 @@ public class FeaturesManager {
 	private static DriverManager driverManager;
 	private static DrawPanelController drawerController;
 	private static int startX, startY, endX, endY;
+	public static List<ILine> linesList = new ArrayList<>();
 
 	/**
 	 * Startup configuration.
@@ -79,6 +82,7 @@ public class FeaturesManager {
                 ILine line = LineFactory.getBasicLine();
                 line.setStartCoordinates(startX,startY);
                 line.setEndCoordinates(endX,endY);
+                linesList.add(line);
 				drawerController.drawLine(line);
 			}
 		});
@@ -117,5 +121,12 @@ public class FeaturesManager {
 	 */
 	public static PlotterCommandManager getPlotterCommandManager() {
 		return commandManager;
+	}
+
+	public static List<ILine> getLinesList(){
+		List<ILine> lines = new ArrayList<>(linesList);
+		System.out.println("Bitch" + lines);
+		linesList.clear();
+		return lines;
 	}
 }
