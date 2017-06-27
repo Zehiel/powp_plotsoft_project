@@ -19,15 +19,15 @@ public class SelectSaveCustomCommandOptionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         List<ILine> lineList = FeaturesManager.getLinesList();
-        System.out.println(lineList);
+        FeaturesManager.drawerController().clearPanel();
         List<IPlotterCommand> commands = new ArrayList<IPlotterCommand>();
         for(ILine line : lineList){
             commands.add(new SetPositionCommand(line.getStartCoordinateX(),line.getStartCoordinateY()));
             commands.add(new DrawToCommand(line.getEndCoordinateX(),line.getEndCoordinateY()));
         }
-        System.out.println(commands);
         PlotterCommandManager manager = FeaturesManager.getPlotterCommandManager();
         manager.setCurrentCommand(commands, "Custom command");
+
 
     }
 }

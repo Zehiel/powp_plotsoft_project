@@ -71,14 +71,12 @@ public class FeaturesManager {
 			public void mousePressed(MouseEvent e) {
 				startX = e.getX()-270;
 				startY = e.getY()-230;
-				System.out.println("Start:"+startX+startY);
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				endX = e.getX()-270;
 				endY = e.getY()-230;
-                System.out.println("Finish:"+endX+endY);
                 ILine line = LineFactory.getBasicLine();
                 line.setStartCoordinates(startX,startY);
                 line.setEndCoordinates(endX,endY);
@@ -87,12 +85,6 @@ public class FeaturesManager {
 			}
 		});
 
-//		drawerPanel.addMouseMotionListener(new MouseMotionAdapter() {
-//			@Override
-//			public void mouseDragged(MouseEvent e) {
-//				super.mouseDragged(e);
-//			}
-//		});
 
 	}
 
@@ -125,7 +117,6 @@ public class FeaturesManager {
 
 	public static List<ILine> getLinesList(){
 		List<ILine> lines = new ArrayList<>(linesList);
-		System.out.println("Bitch" + lines);
 		linesList.clear();
 		return lines;
 	}
