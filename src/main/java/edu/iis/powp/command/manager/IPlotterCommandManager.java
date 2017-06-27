@@ -15,4 +15,5 @@ public interface IPlotterCommandManager {
     public IPlotterCommand getCurrentCommand();
     public void clearCurrentCommand();
     public Publisher getChangePublisher();
+    public String getCurrentCommandString();
 }

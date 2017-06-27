@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by user on 2017-06-11.
  */
-public class AbstractPlotterCommandManager implements IPlotterCommandManager{
+public abstract class AbstractPlotterCommandManager implements IPlotterCommandManager{
 
     protected IPlotterCommand currentCommand = null;
 

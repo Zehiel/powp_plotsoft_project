@@ -9,13 +9,20 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.iis.powp.app.Application;
 import edu.iis.powp.appext.FeaturesManager;
 import edu.iis.powp.command.*;
+import edu.iis.powp.command.manager.AbstractPlotterCommandManager;
 import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.command.manager.TweakedPlotterCommandManager;
 
-public class SelectLoadSecretCompositeCommandOptionListener implements ActionListener {
+
+public class SelectLoadSecretCompositeCommandOptionListener extends AbstractCommandListener implements ActionListener {
+
+    public SelectLoadSecretCompositeCommandOptionListener(Application context) {
+        super(context);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e)
@@ -56,11 +63,10 @@ public class SelectLoadSecretCompositeCommandOptionListener implements ActionLis
         superCommand.add(secondLetterS);
 
 
-        IPlotterCommandManager oldManager = FeaturesManager.getPlotterCommandManager();
         FeaturesManager.setPlotterCommandManager(new TweakedPlotterCommandManager());
         TweakedPlotterCommandManager manager = (TweakedPlotterCommandManager) FeaturesManager.getPlotterCommandManager();
         manager.setCurrentCommand(superCommand, "TopSecretCompoundCommand");
 
-        FeaturesManager.setPlotterCommandManager(oldManager);
+
     }
 }

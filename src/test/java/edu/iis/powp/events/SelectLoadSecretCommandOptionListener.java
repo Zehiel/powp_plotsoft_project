@@ -9,9 +9,15 @@ import edu.iis.powp.appext.FeaturesManager;
 import edu.iis.powp.command.DrawToCommand;
 import edu.iis.powp.command.IPlotterCommand;
 import edu.iis.powp.command.SetPositionCommand;
+import edu.iis.powp.command.manager.AbstractPlotterCommandManager;
 import edu.iis.powp.command.manager.PlotterCommandManager;
+import edu.iis.powp.app.Application;
 
-public class SelectLoadSecretCommandOptionListener implements ActionListener {
+public class SelectLoadSecretCommandOptionListener extends AbstractCommandListener implements ActionListener {
+
+	public SelectLoadSecretCommandOptionListener(Application context) {
+		super(context);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
@@ -31,7 +37,8 @@ public class SelectLoadSecretCommandOptionListener implements ActionListener {
 		commands.add(new DrawToCommand(70, 0));
 		commands.add(new DrawToCommand(70, 50));
 		commands.add(new DrawToCommand(20, 50));
-		
+
+
 	    PlotterCommandManager manager = (PlotterCommandManager)FeaturesManager.getPlotterCommandManager();
 	    manager.setCurrentCommand(commands, "TopSecretCommand");
 	}

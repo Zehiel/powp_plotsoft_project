@@ -44,8 +44,8 @@ public class TestPlotterApp {
 	 *            Application context.
 	 */
 	private static void setupCommandTests(Application application) {
-		application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
-		application.addTest("Load secret composite command", new SelectLoadSecretCompositeCommandOptionListener());
+		application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener(application));
+		application.addTest("Load secret composite command", new SelectLoadSecretCompositeCommandOptionListener(application));
 		application.addTest("Run command", new SelectRunCurrentCommandOptionListener());
 
 	}

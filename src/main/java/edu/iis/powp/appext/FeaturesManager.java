@@ -24,14 +24,25 @@ public class FeaturesManager {
 			areFeaturesAdded = true;
 
 			driverManager = application.getDriverManager();
-			setupCommandManager();
+			setupCommandManager(new PlotterCommandManager());
 
 			setupDrawerPlugin(application);
 		}
 	}
 
-	private static void setupCommandManager() {
-		commandManager = new PlotterCommandManager();
+	public synchronized static void expandApplication(Application application, IPlotterCommandManager commandManager) {
+		if (!areFeaturesAdded) {
+			areFeaturesAdded = true;
+
+			driverManager = application.getDriverManager();
+			setupCommandManager(commandManager);
+
+			setupDrawerPlugin(application);
+		}
+	}
+
+	private static void setupCommandManager(IPlotterCommandManager newCommandManager) {
+		commandManager = newCommandManager;
 
 		LoggerCommandChangeObserver loggerObserver = new LoggerCommandChangeObserver();
 		commandManager.getChangePublisher().addSubscriber(loggerObserver);
@@ -72,7 +83,7 @@ public class FeaturesManager {
 	}
 
 	public static void setPlotterCommandManager(IPlotterCommandManager iPlotterCommandManager) {
-		commandManager = iPlotterCommandManager;
+		FeaturesManager.commandManager = iPlotterCommandManager;
 	}
 
 	/**
