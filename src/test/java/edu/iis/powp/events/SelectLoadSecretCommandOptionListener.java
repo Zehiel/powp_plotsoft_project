@@ -39,6 +39,7 @@ public class SelectLoadSecretCommandOptionListener extends AbstractCommandListen
 		commands.add(new DrawToCommand(20, 50));
 
 
+		FeaturesManager.setPlotterCommandManager(new PlotterCommandManager());
 	    PlotterCommandManager manager = (PlotterCommandManager)FeaturesManager.getPlotterCommandManager();
 	    manager.setCurrentCommand(commands, "TopSecretCommand");
 	}

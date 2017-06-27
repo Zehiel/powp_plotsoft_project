@@ -66,7 +66,5 @@ public class SelectLoadSecretCompositeCommandOptionListener extends AbstractComm
         FeaturesManager.setPlotterCommandManager(new TweakedPlotterCommandManager());
         TweakedPlotterCommandManager manager = (TweakedPlotterCommandManager) FeaturesManager.getPlotterCommandManager();
         manager.setCurrentCommand(superCommand, "TopSecretCompoundCommand");
-
-
     }
 }
