@@ -2,6 +2,7 @@ package edu.iis.powp.appext;
 
 import edu.iis.powp.app.Application;
 import edu.iis.powp.app.DriverManager;
+import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.LoggerCommandChangeObserver;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.events.predefine.SelectClearPanelOptionListener;
@@ -20,7 +21,7 @@ public class FeaturesManager {
 
 	private static boolean areFeaturesAdded = false;
 
-	private static PlotterCommandManager commandManager;
+	private static IPlotterCommandManager commandManager;
 	private static DriverManager driverManager;
 	private static DrawPanelController drawerController;
 	private static int startX, startY, endX, endY;
@@ -34,14 +35,25 @@ public class FeaturesManager {
 			areFeaturesAdded = true;
 
 			driverManager = application.getDriverManager();
-			setupCommandManager();
+			setupCommandManager(new PlotterCommandManager());
 
 			setupDrawerPlugin(application);
 		}
 	}
 
-	private static void setupCommandManager() {
-		commandManager = new PlotterCommandManager();
+	public synchronized static void expandApplication(Application application, IPlotterCommandManager commandManager) {
+		if (!areFeaturesAdded) {
+			areFeaturesAdded = true;
+
+			driverManager = application.getDriverManager();
+			setupCommandManager(commandManager);
+
+			setupDrawerPlugin(application);
+		}
+	}
+
+	private static void setupCommandManager(IPlotterCommandManager newCommandManager) {
+		commandManager = newCommandManager;
 
 		LoggerCommandChangeObserver loggerObserver = new LoggerCommandChangeObserver();
 		commandManager.getChangePublisher().addSubscriber(loggerObserver);
@@ -106,12 +118,16 @@ public class FeaturesManager {
 		return driverManager;
 	}
 
+	public static void setPlotterCommandManager(IPlotterCommandManager iPlotterCommandManager) {
+		FeaturesManager.commandManager = iPlotterCommandManager;
+	}
+
 	/**
 	 * Get manager of application plotter command.
 	 * 
 	 * @return plotterCommandManager.
 	 */
-	public static PlotterCommandManager getPlotterCommandManager() {
+	public static IPlotterCommandManager getPlotterCommandManager() {
 		return commandManager;
 	}
 

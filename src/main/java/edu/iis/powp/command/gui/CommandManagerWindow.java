@@ -1,22 +1,25 @@
 package edu.iis.powp.command.gui;
 
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
 
+import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.observer.Subscriber;
 import edu.iis.powp.window.WindowComponent;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
 
-	private PlotterCommandManager commandManager;
+	private IPlotterCommandManager commandManager;
 
 	private final JLabel commandNameLabel = new JLabel("Command Name");
 	private final JLabel commandListLabel = new JLabel("Command List");
-	private JTextArea currentCommandField;
+	private JTextArea currentCommandField = new JTextArea("");
 	private JTextField commandNameField;
 	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton;
 	private JList commandList;
@@ -25,12 +28,9 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private DefaultListModel listModel;
 	private String observerListString;
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 9204679248304669948L;
 
-	public CommandManagerWindow(PlotterCommandManager commandManager) {
+	public CommandManagerWindow(IPlotterCommandManager commandManager) {
 		this.commandManager = commandManager;
 		initializeUI();
 	}
@@ -139,25 +139,30 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	}
 
 	private void clearCommand() {
-//		commandManager.clearCurrentCommand();
-//		updateCurrentCommandField();
+		commandManager.clearCurrentCommand();
+		updateCurrentCommandField();
 	}
 
 	public void updateCurrentCommandField() {
-//		currentCommandField.setText(commandManager.getCurrentCommandString());
+		currentCommandField.setText(commandManager.getCurrentCommandString());
+	}
+
+	public void deleteObservers() {
+		commandManager.getChangePublisher().clearObservers();
+		this.updateObserverListField();
 	}
 
 
 	private void updateObserverListField() {
-//		observerListString = "";
-//		List<Subscriber> commandChangeSubscribers = commandManager.getChangePublisher().getSubscribers();
-//		for (Subscriber observer : commandChangeSubscribers) {
-//			observerListString += observer.toString() + System.lineSeparator();
-//		}
-//		if (commandChangeSubscribers.isEmpty())
-//			observerListString = "No observers loaded";
-//
-//		observerListField.setText(observerListString);
+		observerListString = "";
+		List<Subscriber> commandChangeSubscribers = commandManager.getChangePublisher().getSubscribers();
+		for (Subscriber observer : commandChangeSubscribers) {
+			observerListString += observer.toString() + System.lineSeparator();
+		}
+		if (commandChangeSubscribers.isEmpty())
+			observerListString = "No observers loaded";
+
+		observerListField.setText(observerListString);
 	}
 
 	@Override

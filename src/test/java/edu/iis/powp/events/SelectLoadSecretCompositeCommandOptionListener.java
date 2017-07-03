@@ -9,11 +9,20 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.iis.powp.app.Application;
 import edu.iis.powp.appext.FeaturesManager;
 import edu.iis.powp.command.*;
+import edu.iis.powp.command.manager.AbstractPlotterCommandManager;
+import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.PlotterCommandManager;
+import edu.iis.powp.command.manager.TweakedPlotterCommandManager;
 
-public class SelectLoadSecretCompositeCommandOptionListener implements ActionListener {
+
+public class SelectLoadSecretCompositeCommandOptionListener extends AbstractCommandListener implements ActionListener {
+
+    public SelectLoadSecretCompositeCommandOptionListener(Application context) {
+        super(context);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e)
@@ -37,14 +46,13 @@ public class SelectLoadSecretCompositeCommandOptionListener implements ActionLis
         letterS.add(new DrawToCommand(70, 0));
         letterS.add(new DrawToCommand(70, 50));
         letterS.add(new DrawToCommand(20, 50));
-
         CompositeCommand secondLetterS = new CompositeCommand();
-        letterS.add(new SetPositionCommand(170, -50));
-        letterS.add(new DrawToCommand(120, -50));
+        letterS.add(new SetPositionCommand(120, -50));
+        letterS.add(new DrawToCommand(70, -50));
+        letterS.add(new DrawToCommand(70, 0));
         letterS.add(new DrawToCommand(120, 0));
-        letterS.add(new DrawToCommand(170, 0));
-        letterS.add(new DrawToCommand(170, 50));
         letterS.add(new DrawToCommand(120, 50));
+        letterS.add(new DrawToCommand(70, 50));
 
 
         commands.add(firstLetterI);
@@ -52,12 +60,11 @@ public class SelectLoadSecretCompositeCommandOptionListener implements ActionLis
         commands.add(letterS);
 
         CompoundCommand superCommand = new CompoundCommand(commands);
+        superCommand.add(secondLetterS);
 
-//        List<IPlotterCommand> superCommands = new ArrayList<>();
-//        superCommands.add(superCommand);
-//        superCommands.add(secondLetterS);
 
-        PlotterCommandManager manager = FeaturesManager.getPlotterCommandManager();
-        manager.setCurrentCommand(superCommand, "TopSecretCommand");
+        FeaturesManager.setPlotterCommandManager(new TweakedPlotterCommandManager());
+        TweakedPlotterCommandManager manager = (TweakedPlotterCommandManager) FeaturesManager.getPlotterCommandManager();
+        manager.setCurrentCommand(superCommand, "TopSecretCompoundCommand");
     }
 }

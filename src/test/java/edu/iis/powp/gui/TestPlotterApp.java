@@ -22,6 +22,7 @@ import edu.kis.powp.drawer.shape.LineFactory;
 
 public class TestPlotterApp {
 	private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static CommandManagerWindowCommandChangeObserver windowObserver;
 
 	/**
 	 * Setup test concerning preset figures in context.
@@ -44,8 +45,8 @@ public class TestPlotterApp {
 	 *            Application context.
 	 */
 	private static void setupCommandTests(Application application) {
-		application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
-		application.addTest("Load secret composite command", new SelectLoadSecretCompositeCommandOptionListener());
+		application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener(application));
+		application.addTest("Load secret composite command", new SelectLoadSecretCompositeCommandOptionListener(application));
 		application.addTest("Run command", new SelectRunCurrentCommandOptionListener());
 
 	}
@@ -75,7 +76,7 @@ public class TestPlotterApp {
 		CommandManagerWindow commandManager = new CommandManagerWindow(FeaturesManager.getPlotterCommandManager());
 		application.addWindowComponent("Command Manager", commandManager);
 
-		CommandManagerWindowCommandChangeObserver windowObserver = new CommandManagerWindowCommandChangeObserver(
+		windowObserver = new CommandManagerWindowCommandChangeObserver(
 				commandManager);
 		FeaturesManager.getPlotterCommandManager().getChangePublisher().addSubscriber(windowObserver);
 	}
