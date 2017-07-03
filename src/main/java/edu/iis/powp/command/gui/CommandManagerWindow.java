@@ -125,8 +125,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		listModel = new DefaultListModel();
 		commandList = new JList(listModel);
 		commandListPanel.add(commandList);
-		listModel.addElement(new String("PLACEHOLDER"));
-		listModel.addElement(new String("PLACEHOLDER2"));
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(commandListPanel);
@@ -179,6 +177,9 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	}
 
 	private void saveCustomCommand() {
+		String commandName;
+		if ((commandName = commandNameField.getText()).isEmpty() || commandMap.containsKey(commandName)) return;
+
 		List<ILine> lineList = FeaturesManager.getLinesList();
 		FeaturesManager.drawerController().clearPanel();
 		List<IPlotterCommand> commands = new ArrayList<>();
@@ -188,9 +189,12 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		}
 
 		CompositeCommand compositeCommand = new CompositeCommand(commands);
-		String commandName = commandNameField.getText();
 		commandMap.put(commandName, compositeCommand);
 		listModel.addElement(commandName);
+	}
+
+	private void loadCustomCommand() {
+
 	}
 
 }
