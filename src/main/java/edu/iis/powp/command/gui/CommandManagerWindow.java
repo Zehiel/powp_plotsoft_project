@@ -27,7 +27,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private final JLabel commandListLabel = new JLabel("Command List");
 	private JTextArea currentCommandField = new JTextArea("");
 	private JTextField commandNameField;
-	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton;
+	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton, saveToFileButton, loadFromFileButton;
 	private JList commandList;
 	private JTextArea observerListField;
 
@@ -46,7 +46,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private void initializeUI() {
 		this.setTitle("Command Manager");
-		this.setSize(400, 400);
+		this.setSize(400, 500);
 		Container content = this.getContentPane();
 		content.setLayout(new GridBagLayout());
 
@@ -74,18 +74,12 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 //		updateCurrentCommandField();
 
 
-		JPanel drawPanel = new JPanel();
-		drawPanel.setBackground(Color.WHITE);
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 3;
-		c.gridx = 0;
-		c.weighty = 1;
-		content.add(drawPanel,c);
+
 
 		JPanel sidePanel = new JPanel(new GridBagLayout());
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
-		c.gridx = 1;
+		c.gridx = 0;
 		c.weighty = 1;
 		content.add(sidePanel, c);
 
@@ -149,6 +143,28 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		});
 		c.gridheight = 1;
 		sidePanel.add(useCommandButton, c);
+
+		saveToFileButton = new JButton("Save to file");
+		c.gridy = 11;
+		saveToFileButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadCustomCommand();
+			}
+		});
+		c.gridheight = 1;
+		sidePanel.add(saveToFileButton, c);
+
+		loadFromFileButton = new JButton("Load from file");
+		c.gridy = 12;
+		loadFromFileButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadCustomCommand();
+			}
+		});
+		c.gridheight = 1;
+		sidePanel.add(loadFromFileButton, c);
 	}
 
 	private void clearCommand() {
