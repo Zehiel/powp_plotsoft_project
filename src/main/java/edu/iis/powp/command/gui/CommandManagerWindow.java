@@ -3,15 +3,21 @@ package edu.iis.powp.command.gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import edu.iis.powp.appext.FeaturesManager;
+import edu.iis.powp.command.*;
 import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.observer.Subscriber;
 import edu.iis.powp.window.WindowComponent;
+import edu.kis.powp.drawer.shape.ILine;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
 
@@ -26,12 +32,15 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private JTextArea observerListField;
 
 	private DefaultListModel listModel;
+	private HashMap<String, CompositeCommand> commandMap;
+	private IPlotterCommand currentCommand;
 	private String observerListString;
 
 	private static final long serialVersionUID = 9204679248304669948L;
 
 	public CommandManagerWindow(IPlotterCommandManager commandManager) {
 		this.commandManager = commandManager;
+		commandMap = new HashMap<>();
 		initializeUI();
 	}
 
@@ -88,52 +97,56 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 1;
 
-		setPositionButton = new JButton("Set Position - Mode");
-		c.gridy = 1;
-		sidePanel.add(setPositionButton, c);
-
-		drawToButton = new JButton("Draw To - Mode");
-		c.gridy = 2;
-		sidePanel.add(drawToButton, c);
-
 		clearCommandButton = new JButton("Clear command");
-		c.gridy = 3;
+		c.gridy = 1;
 		clearCommandButton.addActionListener((ActionEvent e) -> this.clearCommand());
 		sidePanel.add(clearCommandButton, c);
 
 		commandNameLabel.setHorizontalAlignment(JLabel.CENTER);
-		c.gridy = 4;
+		c.gridy = 2;
 		sidePanel.add(commandNameLabel, c);
 
 		commandNameField = new JTextField();
-		c.gridy = 5;
+		c.gridy = 3;
 		sidePanel.add(commandNameField, c);
 
 		saveCommandButton = new JButton("Save Command");
-		c.gridy = 6;
+		c.gridy = 4;
+		saveCommandButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveCustomCommand();
+			}
+		});
 		sidePanel.add(saveCommandButton, c);
 
 		commandListLabel.setHorizontalAlignment(JLabel.CENTER);
-		c.gridy = 7;
+		c.gridy = 5;
 		sidePanel.add(commandListLabel, c);
 
 		JPanel commandListPanel = new JPanel(new GridLayout(1,1));
 		listModel = new DefaultListModel();
 		commandList = new JList(listModel);
 		commandListPanel.add(commandList);
-		listModel.addElement(new String("PLACEHOLDER"));
-		listModel.addElement(new String("PLACEHOLDER2"));
+		commandListPanel.setMinimumSize(new Dimension(commandListPanel.getWidth(), 160));
+		commandListPanel.setPreferredSize(new Dimension(commandListPanel.getWidth(), 160));
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(commandListPanel);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		c.gridy = 8;
+		c.gridy = 6;
 		c.gridheight = 4;
 		sidePanel.add(scrollPane, c);
 
 		useCommandButton = new JButton("Use Command");
-		c.gridy = 12;
+		c.gridy = 10;
+		useCommandButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadCustomCommand();
+			}
+		});
 		c.gridheight = 1;
 		sidePanel.add(useCommandButton, c);
 	}
@@ -172,6 +185,32 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		} else {
 			this.setVisible(true);
 		}
+	}
+
+	private void saveCustomCommand() {
+		String commandName;
+		if ((commandName = commandNameField.getText()).isEmpty() || commandMap.containsKey(commandName)) return;
+		commandNameField.setText("");
+
+		List<ILine> lineList = FeaturesManager.getLinesList();
+		FeaturesManager.drawerController().clearPanel();
+		List<IPlotterCommand> commands = new ArrayList<>();
+		for(ILine line : lineList){
+			commands.add(new SetPositionCommand(line.getStartCoordinateX(),line.getStartCoordinateY()));
+			commands.add(new DrawToCommand(line.getEndCoordinateX(),line.getEndCoordinateY()));
+		}
+
+		CompositeCommand compositeCommand = new CompositeCommand(commands);
+		commandMap.put(commandName, compositeCommand);
+		listModel.addElement(commandName);
+
+	}
+
+	private void loadCustomCommand() {
+		String commandName;
+		if ((commandName = commandList.getSelectedValue().toString()) == null) return;
+		currentCommand = commandMap.get(commandName);
+		FeaturesManager.getPlotterCommandManager().setCurrentCommand(currentCommand);
 	}
 
 }
