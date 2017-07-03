@@ -6,6 +6,8 @@ edu.iis.powp.appext
 edu.iis.powp.command
 edu.iis.powp.command.gui
 edu.iis.powp.command.manager
+edu.iis.powp.command.storage
+edu.iis.powp.commandfactory
 edu.iis.powp.drawer
 edu.iis.powp.events
 edu.iis.powp.events.predefine
