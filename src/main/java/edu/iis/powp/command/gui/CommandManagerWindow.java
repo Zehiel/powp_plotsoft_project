@@ -8,13 +8,10 @@ import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import edu.iis.powp.appext.FeaturesManager;
 import edu.iis.powp.command.*;
 import edu.iis.powp.command.manager.IPlotterCommandManager;
-import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.observer.Subscriber;
 import edu.iis.powp.window.WindowComponent;
 import edu.kis.powp.drawer.shape.ILine;
@@ -27,7 +24,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private final JLabel commandListLabel = new JLabel("Command List");
 	private JTextArea currentCommandField = new JTextArea("");
 	private JTextField commandNameField;
-	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton;
+	private JButton loadFromFileButton, saveToFileButton, clearCommandButton, saveCommandButton, useCommandButton;
 	private JList commandList;
 	private JTextArea observerListField;
 
@@ -52,47 +49,54 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 		GridBagConstraints c = new GridBagConstraints();
 
+		JPanel leftPanel = new JPanel(new GridBagLayout());
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.gridx = 0;
+		c.weighty = 1;
+		content.add(leftPanel,c);
 
+		JPanel rightPanel = new JPanel(new GridBagLayout());
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.gridx = 1;
+		c.weighty = 1;
+		content.add(rightPanel, c);
 
+		initializeLeftPanel(leftPanel);
+		initializeRightPanel(rightPanel);
+	}
+
+	private void initializeLeftPanel(JPanel leftPanel) {
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 1;
+
+		loadFromFileButton = new JButton("Load from file");
+		c.gridy = 1;
+		leftPanel.add(loadFromFileButton, c);
+
+//		saveToFileButton = new JButton("Save to file");
+//		c.gridy = 2;
+//		leftPanel.add(saveCommandButton, c);
 
 //		observerListField = new JTextArea("");
 //		observerListField.setEditable(false);
-//		c.fill = GridBagConstraints.BOTH;
 //		c.weightx = 1;
-//		c.gridx = 0;
-//		c.weighty = 1;
-//		content.add(observerListField, c);
+//		c.gridx = 3;
+//		//content.add(observerListField, c);
 //		updateObserverListField();
 //
 //		currentCommandField = new JTextArea("");
 //		currentCommandField.setEditable(false);
 //		c.fill = GridBagConstraints.BOTH;
 //		c.weightx = 1;
-//		c.gridx = 0;
-//		c.weighty = 1;
-//		content.add(currentCommandField, c);
+//		c.gridx = 4;
+//		//content.add(currentCommandField, c);
 //		updateCurrentCommandField();
-
-
-		JPanel drawPanel = new JPanel();
-		drawPanel.setBackground(Color.WHITE);
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 3;
-		c.gridx = 0;
-		c.weighty = 1;
-		content.add(drawPanel,c);
-
-		JPanel sidePanel = new JPanel(new GridBagLayout());
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		c.gridx = 1;
-		c.weighty = 1;
-		content.add(sidePanel, c);
-
-		initializeSidePanel(sidePanel);
 	}
 
-	private void initializeSidePanel(JPanel sidePanel) {
+	private void initializeRightPanel(JPanel rightPanel) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 1;
@@ -100,15 +104,15 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		clearCommandButton = new JButton("Clear command");
 		c.gridy = 1;
 		clearCommandButton.addActionListener((ActionEvent e) -> this.clearCommand());
-		sidePanel.add(clearCommandButton, c);
+		rightPanel.add(clearCommandButton, c);
 
 		commandNameLabel.setHorizontalAlignment(JLabel.CENTER);
 		c.gridy = 2;
-		sidePanel.add(commandNameLabel, c);
+		rightPanel.add(commandNameLabel, c);
 
 		commandNameField = new JTextField();
 		c.gridy = 3;
-		sidePanel.add(commandNameField, c);
+		rightPanel.add(commandNameField, c);
 
 		saveCommandButton = new JButton("Save Command");
 		c.gridy = 4;
@@ -118,11 +122,11 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 				saveCustomCommand();
 			}
 		});
-		sidePanel.add(saveCommandButton, c);
+		rightPanel.add(saveCommandButton, c);
 
 		commandListLabel.setHorizontalAlignment(JLabel.CENTER);
 		c.gridy = 5;
-		sidePanel.add(commandListLabel, c);
+		rightPanel.add(commandListLabel, c);
 
 		JPanel commandListPanel = new JPanel(new GridLayout(1,1));
 		listModel = new DefaultListModel();
@@ -137,7 +141,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		c.gridy = 6;
 		c.gridheight = 4;
-		sidePanel.add(scrollPane, c);
+		rightPanel.add(scrollPane, c);
 
 		useCommandButton = new JButton("Use Command");
 		c.gridy = 10;
@@ -148,7 +152,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 			}
 		});
 		c.gridheight = 1;
-		sidePanel.add(useCommandButton, c);
+		rightPanel.add(useCommandButton, c);
 	}
 
 	private void clearCommand() {
