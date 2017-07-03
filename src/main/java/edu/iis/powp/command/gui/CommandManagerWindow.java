@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import edu.iis.powp.appext.FeaturesManager;
 import edu.iis.powp.command.*;
@@ -31,6 +33,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private DefaultListModel listModel;
 	private HashMap<String, CompositeCommand> commandMap;
+	private IPlotterCommand currentCommand;
 	private String observerListString;
 
 	private static final long serialVersionUID = 9204679248304669948L;
@@ -128,13 +131,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		commandListPanel.setMinimumSize(new Dimension(commandListPanel.getWidth(), 160));
 		commandListPanel.setPreferredSize(new Dimension(commandListPanel.getWidth(), 160));
 
-
-
-		//listModel.addElement("Zapychacz");
-		//listModel.addElement("Zapychacz2");
-		//listModel.addElement("Zapychacz3");
-		//listModel.addElement("Zapychacz4");
-
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(commandListPanel);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -145,6 +141,12 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 		useCommandButton = new JButton("Use Command");
 		c.gridy = 10;
+		useCommandButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadCustomCommand();
+			}
+		});
 		c.gridheight = 1;
 		sidePanel.add(useCommandButton, c);
 	}
@@ -188,6 +190,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private void saveCustomCommand() {
 		String commandName;
 		if ((commandName = commandNameField.getText()).isEmpty() || commandMap.containsKey(commandName)) return;
+		commandNameField.setText("");
 
 		List<ILine> lineList = FeaturesManager.getLinesList();
 		FeaturesManager.drawerController().clearPanel();
@@ -200,10 +203,14 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		CompositeCommand compositeCommand = new CompositeCommand(commands);
 		commandMap.put(commandName, compositeCommand);
 		listModel.addElement(commandName);
+
 	}
 
 	private void loadCustomCommand() {
-
+		String commandName;
+		if ((commandName = commandList.getSelectedValue().toString()) == null) return;
+		currentCommand = commandMap.get(commandName);
+		FeaturesManager.getPlotterCommandManager().setCurrentCommand(currentCommand);
 	}
 
 }
