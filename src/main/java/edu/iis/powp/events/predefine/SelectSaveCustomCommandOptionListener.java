@@ -4,6 +4,7 @@ import edu.iis.powp.appext.FeaturesManager;
 import edu.iis.powp.command.DrawToCommand;
 import edu.iis.powp.command.IPlotterCommand;
 import edu.iis.powp.command.SetPositionCommand;
+import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.kis.powp.drawer.shape.ILine;
 
@@ -25,7 +26,8 @@ public class SelectSaveCustomCommandOptionListener implements ActionListener {
             commands.add(new SetPositionCommand(line.getStartCoordinateX(),line.getStartCoordinateY()));
             commands.add(new DrawToCommand(line.getEndCoordinateX(),line.getEndCoordinateY()));
         }
-        PlotterCommandManager manager = FeaturesManager.getPlotterCommandManager();
+
+        PlotterCommandManager manager = (PlotterCommandManager) FeaturesManager.getPlotterCommandManager();
         manager.setCurrentCommand(commands, "Custom command");
 
 
