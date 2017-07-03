@@ -125,6 +125,15 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		listModel = new DefaultListModel();
 		commandList = new JList(listModel);
 		commandListPanel.add(commandList);
+		commandListPanel.setMinimumSize(new Dimension(commandListPanel.getWidth(), 160));
+		commandListPanel.setPreferredSize(new Dimension(commandListPanel.getWidth(), 160));
+
+
+
+		//listModel.addElement("Zapychacz");
+		//listModel.addElement("Zapychacz2");
+		//listModel.addElement("Zapychacz3");
+		//listModel.addElement("Zapychacz4");
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(commandListPanel);
