@@ -4,6 +4,7 @@ package edu.iis.powp.command.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import edu.iis.powp.appext.FeaturesManager;
 import edu.iis.powp.command.*;
 import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.PlotterCommandManager;
+import edu.iis.powp.command.storage.CommandsStorage;
 import edu.iis.powp.observer.Subscriber;
 import edu.iis.powp.window.WindowComponent;
 import edu.kis.powp.drawer.shape.ILine;
@@ -30,6 +32,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private JButton setPositionButton, drawToButton, clearCommandButton, saveCommandButton, useCommandButton, saveToFileButton, loadFromFileButton;
 	private JList commandList;
 	private JTextArea observerListField;
+	private CommandsStorage commandsStorage;
 
 	private DefaultListModel listModel;
 	private HashMap<String, CompositeCommand> commandMap;
@@ -39,6 +42,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private static final long serialVersionUID = 9204679248304669948L;
 
 	public CommandManagerWindow(IPlotterCommandManager commandManager) {
+		this.commandsStorage = CommandsStorage.getInstance();
 		this.commandManager = commandManager;
 		commandMap = new HashMap<>();
 		initializeUI();
@@ -149,7 +153,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		saveToFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				loadCustomCommand();
+				saveCommandsList();
 			}
 		});
 		c.gridheight = 1;
@@ -160,11 +164,30 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		loadFromFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				loadCustomCommand();
+				try {
+					loadCommandsList();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		c.gridheight = 1;
 		sidePanel.add(loadFromFileButton, c);
+	}
+
+	private void loadCommandsList() throws FileNotFoundException {
+		listModel = new DefaultListModel();
+		commandsStorage.loadFromFile();
+		commandMap = commandsStorage.getCommands();
+		commandList.setModel(listModel);
+		for (String commandName : commandMap.keySet()) {
+			listModel.addElement(commandName);
+		}
+	}
+
+	private void saveCommandsList() {
+		commandsStorage.setCommands(commandMap);
+		commandsStorage.saveToFile();
 	}
 
 	private void clearCommand() {

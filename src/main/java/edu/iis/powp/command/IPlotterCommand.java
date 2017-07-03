@@ -2,10 +2,12 @@ package edu.iis.powp.command;
 
 import edu.iis.client.plottermagic.IPlotter;
 
+import java.io.Serializable;
+
 /**
  * PlotterCommand interface.
  */
-public interface IPlotterCommand {
+public interface IPlotterCommand extends Serializable {
 
     /**
      * Execute command on plotter.
