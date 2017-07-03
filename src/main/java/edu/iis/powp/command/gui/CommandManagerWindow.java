@@ -179,6 +179,10 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		listModel = new DefaultListModel();
 		commandsStorage.loadFromFile();
 		commandMap = commandsStorage.getCommands();
+		commandList.setModel(listModel);
+		for (String commandName : commandMap.keySet()) {
+			listModel.addElement(commandName);
+		}
 	}
 
 	private void saveCommandsList() {
