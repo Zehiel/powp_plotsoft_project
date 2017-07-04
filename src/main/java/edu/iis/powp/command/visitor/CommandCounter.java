@@ -15,7 +15,7 @@ public class CommandCounter implements edu.iis.powp.command.visitor.Visitor {
     JPanel panel;
     List<JLabel> labels;
 
-    private final static int offsetX = -20, offsetY = 20;
+    private final static int offsetX = -10, offsetY = 10;
 
     public CommandCounter(JPanel jPanel) {
         panel = jPanel;
@@ -25,7 +25,7 @@ public class CommandCounter implements edu.iis.powp.command.visitor.Visitor {
     @Override
     public void visit(IEditablePlotterCommand cmd) {
         JLabel label = new JLabel("" + (labels.size() + 1));
-        label.setLocation(100, 100);
+        label.setLocation(cmd.getX() + panel.getWidth()/2 + offsetX, cmd.getY() + panel.getHeight()/2 + offsetY);
         label.setSize(50, 25);
         labels.add(label);
     }
