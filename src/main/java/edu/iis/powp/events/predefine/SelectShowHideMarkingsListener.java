@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by grusz on 08.06.2017.
  */
-public class SelectSaveCustomCommandOptionListener implements ActionListener {
+public class SelectShowHideMarkingsListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         CommandCounter commandCounter = FeaturesManager.getCommandCounter();

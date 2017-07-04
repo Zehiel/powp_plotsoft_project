@@ -7,7 +7,7 @@ import edu.iis.powp.command.manager.LoggerCommandChangeObserver;
 import edu.iis.powp.command.manager.PlotterCommandManager;
 import edu.iis.powp.command.visitor.CommandCounter;
 import edu.iis.powp.events.predefine.SelectClearPanelOptionListener;
-import edu.iis.powp.events.predefine.SelectSaveCustomCommandOptionListener;
+import edu.iis.powp.events.predefine.SelectShowHideMarkingsListener;
 import edu.kis.powp.drawer.panel.DrawPanelController;
 import edu.kis.powp.drawer.shape.ILine;
 import edu.kis.powp.drawer.shape.LineFactory;
@@ -71,7 +71,7 @@ public class FeaturesManager {
 	private static void setupDrawerPlugin(Application application) {
 		SelectClearPanelOptionListener selectClearPanelOptionListener = new SelectClearPanelOptionListener();
 
-		SelectSaveCustomCommandOptionListener selectSaveCustomCommandOptionListener = new SelectSaveCustomCommandOptionListener();
+		SelectShowHideMarkingsListener selectShowHideMarkingsListener = new SelectShowHideMarkingsListener();
 
 		JPanel drawerPanel = application.getFreePanel();
 		drawerController = new DrawPanelController();
@@ -79,7 +79,7 @@ public class FeaturesManager {
 
 		application.addComponentMenu(DrawPanelController.class, "Draw Panel", 0);
 		application.addComponentMenuElement(DrawPanelController.class, "Clear Panel", selectClearPanelOptionListener);
-		application.addComponentMenuElement(DrawPanelController.class, "Show/hide markings", selectSaveCustomCommandOptionListener);
+		application.addComponentMenuElement(DrawPanelController.class, "Show/hide markings", selectShowHideMarkingsListener);
 
 		drawerController.initialize(drawerPanel);
 
