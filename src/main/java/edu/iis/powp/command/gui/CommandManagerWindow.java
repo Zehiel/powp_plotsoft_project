@@ -240,6 +240,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		}
 
 		CompoundCommand compositeCommand = new CompoundCommand(commands);
+		compositeCommand.setCommandName(commandName);
 		commandMap.put(commandName, compositeCommand);
 		listModel.addElement(commandName);
 
