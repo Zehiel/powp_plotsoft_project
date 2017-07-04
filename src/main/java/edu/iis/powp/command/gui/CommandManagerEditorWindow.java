@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 public class CommandManagerEditorWindow extends JFrame implements WindowComponent {
@@ -110,6 +112,12 @@ public class CommandManagerEditorWindow extends JFrame implements WindowComponen
 		c.gridy = 10;
 		sidePanel.add(commandYPositionField, c);
 
+		setPositionButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setNewPosition();
+			}
+		});
 		c.gridy = 11;
 		sidePanel.add(setPositionButton, c);
 
@@ -150,6 +158,17 @@ public class CommandManagerEditorWindow extends JFrame implements WindowComponen
 				listModel.addElement(iEditablePlotterCommand.toString());
 			}
 		}
+	}
+
+	private void setNewPosition() {
+		try {
+			int listIndex = commandListUI.getSelectedIndex();
+			IEditablePlotterCommand iEditablePlotterCommand = commandList.get(listIndex);
+			int newX = Integer.parseInt(commandXPositionField.getText());
+			int newY = Integer.parseInt(commandYPositionField.getText());
+			iEditablePlotterCommand.setX(newX);
+			iEditablePlotterCommand.setY(newY);
+		} catch (NumberFormatException nfe) {}
 	}
 
 }
