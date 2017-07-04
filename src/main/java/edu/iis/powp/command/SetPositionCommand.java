@@ -49,4 +49,9 @@ public class SetPositionCommand implements IEditablePlotterCommand {
 		this.posY = y;
 
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
 }

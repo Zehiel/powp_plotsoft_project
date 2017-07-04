@@ -7,8 +7,10 @@ import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.window.WindowComponent;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.util.HashMap;
+import java.util.*;
 
 public class CommandManagerEditorWindow extends JFrame implements WindowComponent {
 
@@ -16,7 +18,7 @@ public class CommandManagerEditorWindow extends JFrame implements WindowComponen
 
 	private JLabel currentCommandLabel;
 	private final JLabel commandListLabel = new JLabel("Subcommand List");
-	private JList commandList;
+	private JList commandListUI;
 
 	private final JLabel commandXPosition = new JLabel("X position");
 	private JTextField commandXPositionField;
@@ -25,14 +27,14 @@ public class CommandManagerEditorWindow extends JFrame implements WindowComponen
 	private JButton setPositionButton = new JButton("Set Position");
 
 	private DefaultListModel listModel;
-	private HashMap<String, IEditablePlotterCommand> commandMap;
+	private java.util.List<IEditablePlotterCommand> commandList;
 	private IPlotterCommand currentCommand;
 
 	private static final long serialVersionUID = 9204679248304669948L;
 
 	public CommandManagerEditorWindow(IPlotterCommandManager commandManager) {
 		this.commandManager = commandManager;
-		commandMap = new HashMap<>();
+		commandList = new ArrayList<>();
 		initializeUI();
 	}
 
@@ -70,8 +72,17 @@ public class CommandManagerEditorWindow extends JFrame implements WindowComponen
 
 		JPanel commandListPanel = new JPanel(new GridLayout(1,1));
 		listModel = new DefaultListModel();
-		commandList = new JList(listModel);
-		commandListPanel.add(commandList);
+		commandListUI = new JList(listModel);
+		commandListUI.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int listIndex = commandListUI.getSelectedIndex();
+				IEditablePlotterCommand iEditablePlotterCommand = commandList.get(listIndex);
+				commandXPositionField.setText("" + iEditablePlotterCommand.getX());
+				commandYPositionField.setText("" + iEditablePlotterCommand.getY());
+			}
+		});
+		commandListPanel.add(commandListUI);
 		commandListPanel.setMinimumSize(new Dimension(commandListPanel.getWidth(), 160));
 		commandListPanel.setPreferredSize(new Dimension(commandListPanel.getWidth(), 160));
 
@@ -111,8 +122,33 @@ public class CommandManagerEditorWindow extends JFrame implements WindowComponen
 		if (this.isVisible()) {
 			this.setVisible(false);
 		} else {
-			currentCommandLabel.setText("Current Command: " + FeaturesManager.getPlotterCommandManager().getCurrentCommandString());
+			updateView();
 			this.setVisible(true);
+		}
+	}
+
+	private void updateView() {
+		currentCommandLabel.setText("Current Command: " + FeaturesManager.getPlotterCommandManager().getCurrentCommandString());
+
+		IPlotterCommand currentCommand = FeaturesManager.getPlotterCommandManager().getCurrentCommand();
+		if (currentCommand instanceof CompoundCommand) {
+			CompoundCommand compoundCommand = (CompoundCommand) currentCommand;
+			listModel.removeAllElements();
+			expandCommand(compoundCommand.iterator());
+		}
+	}
+
+	private void expandCommand(Iterator<IPlotterCommand> iterator) {
+		while(iterator.hasNext()) {
+			IPlotterCommand command = iterator.next();
+			if (command instanceof CompoundCommand) {
+				CompoundCommand compoundCommand = (CompoundCommand) command;
+				expandCommand(compoundCommand.iterator());
+			} else if (command instanceof IEditablePlotterCommand){
+				IEditablePlotterCommand iEditablePlotterCommand = (IEditablePlotterCommand) command;
+				commandList.add(iEditablePlotterCommand);
+				listModel.addElement(iEditablePlotterCommand.toString());
+			}
 		}
 	}
 
