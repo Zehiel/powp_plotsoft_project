@@ -35,7 +35,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private CommandsStorage commandsStorage;
 
 	private DefaultListModel listModel;
-	private HashMap<String, CompositeCommand> commandMap;
+	private HashMap<String, CompoundCommand> commandMap;
 	private IPlotterCommand currentCommand;
 	private String observerListString;
 
@@ -239,7 +239,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 			commands.add(new DrawToCommand(line.getEndCoordinateX(),line.getEndCoordinateY()));
 		}
 
-		CompositeCommand compositeCommand = new CompositeCommand(commands);
+		CompoundCommand compositeCommand = new CompoundCommand(commands);
 		commandMap.put(commandName, compositeCommand);
 		listModel.addElement(commandName);
 

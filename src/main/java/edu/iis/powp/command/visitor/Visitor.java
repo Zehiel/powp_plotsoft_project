@@ -11,8 +11,7 @@ import edu.iis.powp.command.SetPositionCommand;
  */
 
 public interface Visitor {
-    //public void visit(IEditablePlotterCommand cmd);
-    //public void visit(SetPositionCommand cmd);
+    public void visit(IEditablePlotterCommand cmd);
     public void visit(CompoundCommand compoundCommand);
 }
 

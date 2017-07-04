@@ -29,7 +29,6 @@ public class DrawToCommand implements IEditablePlotterCommand {
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
-
 	}
 
 	@Override

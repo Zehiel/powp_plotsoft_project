@@ -1,6 +1,7 @@
 package edu.iis.powp.command.storage;
 
 import edu.iis.powp.command.CompositeCommand;
+import edu.iis.powp.command.CompoundCommand;
 import edu.iis.powp.command.IPlotterCommand;
 
 import java.io.*;
@@ -14,7 +15,7 @@ import java.util.List;
 public class CommandsStorage implements Serializable {
 
     private static CommandsStorage instance = null;
-    private HashMap<String, CompositeCommand> commands ;
+    private HashMap<String, CompoundCommand> commands ;
 
     private CommandsStorage(){
         commands = new HashMap<>();
@@ -40,7 +41,7 @@ public class CommandsStorage implements Serializable {
 
     public void loadFromFile () throws FileNotFoundException {
         try( ObjectInputStream in = new ObjectInputStream( new FileInputStream( new File( "storage" , "commands" ) ) ) ) {
-            HashMap<String, CompositeCommand> read = (HashMap<String, CompositeCommand>) in.readObject();
+            HashMap<String, CompoundCommand> read = (HashMap<String, CompoundCommand>) in.readObject();
             commands = read;
 
         } catch( FileNotFoundException e ){
@@ -52,11 +53,11 @@ public class CommandsStorage implements Serializable {
         }
     }
 
-    public void setCommands(HashMap<String, CompositeCommand> commands) {
+    public void setCommands(HashMap<String, CompoundCommand> commands) {
         this.commands = commands;
     }
 
-    public HashMap<String, CompositeCommand> getCommands() {
+    public HashMap<String, CompoundCommand> getCommands() {
         return commands;
     }
 }

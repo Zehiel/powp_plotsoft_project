@@ -1,6 +1,8 @@
 package edu.iis.powp.command;
 
 import edu.iis.client.plottermagic.IPlotter;
+import edu.iis.powp.command.visitor.Visitable;
+import edu.iis.powp.command.visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,7 +11,7 @@ import java.util.List;
 /**
  * Created by grusz on 06.06.2017.
  */
-public class CompoundCommand implements ICompoundCommand {
+public class CompoundCommand implements ICompoundCommand, Visitable {
 
     private List<IPlotterCommand> childCommands;
     private String commandName = "Undefined Command Name";
@@ -51,5 +53,10 @@ public class CompoundCommand implements ICompoundCommand {
     @Override
     public String toString() {
         return commandName;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }
