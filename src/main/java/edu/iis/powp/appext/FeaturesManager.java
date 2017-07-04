@@ -5,6 +5,7 @@ import edu.iis.powp.app.DriverManager;
 import edu.iis.powp.command.manager.IPlotterCommandManager;
 import edu.iis.powp.command.manager.LoggerCommandChangeObserver;
 import edu.iis.powp.command.manager.PlotterCommandManager;
+import edu.iis.powp.command.visitor.CommandCounter;
 import edu.iis.powp.events.predefine.SelectClearPanelOptionListener;
 import edu.iis.powp.events.predefine.SelectSaveCustomCommandOptionListener;
 import edu.kis.powp.drawer.panel.DrawPanelController;
@@ -25,7 +26,9 @@ public class FeaturesManager {
 	private static DriverManager driverManager;
 	private static DrawPanelController drawerController;
 	private static int startX, startY, endX, endY;
-	public static List<ILine> linesList = new ArrayList<>();
+	private static List<ILine> linesList = new ArrayList<>();
+	private static JPanel drawerPanel;
+	private static CommandCounter commandCounter;
 
 	/**
 	 * Startup configuration.
@@ -70,11 +73,14 @@ public class FeaturesManager {
 
 		SelectSaveCustomCommandOptionListener selectSaveCustomCommandOptionListener = new SelectSaveCustomCommandOptionListener();
 
+		JPanel drawerPanel = application.getFreePanel();
 		drawerController = new DrawPanelController();
+		commandCounter = new CommandCounter(drawerPanel);
+
 		application.addComponentMenu(DrawPanelController.class, "Draw Panel", 0);
 		application.addComponentMenuElement(DrawPanelController.class, "Clear Panel", selectClearPanelOptionListener);
-		application.addComponentMenuElement(DrawPanelController.class, "Save custom command", selectSaveCustomCommandOptionListener);
-		JPanel drawerPanel = application.getFreePanel();
+		application.addComponentMenuElement(DrawPanelController.class, "Show/hide markings", selectSaveCustomCommandOptionListener);
+
 		drawerController.initialize(drawerPanel);
 
 
@@ -135,5 +141,9 @@ public class FeaturesManager {
 		List<ILine> lines = new ArrayList<>(linesList);
 		linesList.clear();
 		return lines;
+	}
+
+	public static CommandCounter getCommandCounter() {
+		return commandCounter;
 	}
 }

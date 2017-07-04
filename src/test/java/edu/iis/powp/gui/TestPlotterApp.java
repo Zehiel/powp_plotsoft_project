@@ -62,6 +62,7 @@ public class TestPlotterApp {
 		application.addDriver("Client Plotter", clientPlotter);
 
 		DrawPanelController drawerController = FeaturesManager.drawerController();
+
 		IPlotter plotter = new LineAdapterPlotterDriver(drawerController, LineFactory.getBasicLine(), "basic");
 		application.addDriver("Line Simulator", plotter);
 		FeaturesManager.getDriverManager().setCurrentPlotter(plotter);
